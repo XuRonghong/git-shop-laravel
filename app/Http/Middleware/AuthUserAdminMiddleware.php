@@ -22,15 +22,15 @@ class AuthUserAdminMiddleware
 
         if(!is_null($user_id)){
             //會員編號取得會員資料
-            $User = User::firstOrFail('user_id');
+            $User = User::findOrFail($user_id);
             if($User->type == 'A'){
                 //是管理者，允許存取
                 $is_allow_access = true;
             }
         }
 
-        //若不允許，導回至首頁
-        if(!$is_allow_access)   return redirect()->to('/'); 
+        //若不允許，導回頁
+        if(!$is_allow_access)   return redirect()->back()->withErrors("你沒有權限存取!!"); 
 
         //若允許，繼續下個請求
         return $next($request);         

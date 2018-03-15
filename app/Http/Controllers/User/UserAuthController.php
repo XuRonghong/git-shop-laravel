@@ -61,9 +61,12 @@ class UserAuthController extends Controller
     	}
 
     	session()->put('user_id',$User->id);   //驗證成功，紀錄會員編號
+        session()->put('user_type',$User->type);
 
 
-        return redirect('/merchandise/');
+        if($User->type == "G")return redirect('/merchandise/');
+        if($User->type == "A")return redirect('/merchandise/manage');
+            return redirect()->back();
         //重新導向到原先造訪頁面，沒有嘗試造訪頁則導向首頁
     	//return redirect()->intended('/');
     }
@@ -90,9 +93,70 @@ class UserAuthController extends Controller
     }
 
 
-
+ 
     //------------------處理註冊資料----------------------------------------------
     public function signUpProcess(){
+
+        $input = request()->all();
+        //var_dump($input);
+        //exit();
+
+        $rules = [
+            'nickname'              =>['required','max:50'],
+            'email'                 =>['required','max:150','email'],
+            'password'              =>['required','same:password_confirmation','min:6'],
+            'password_confirmation' =>['required','min:6'],  
+        ];
+
+        $validator = validator($input, $rules);
+
+        if($validator->fails()){
+            return redirect('/user/auth/sign-up')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+
+        //從資料庫撈取所有使用者信箱，是否重複
+        $UserEmail = User::all();
+        foreach ($UserEmail as $key ) {
+            if($key->email==$input['email'])
+                return redirect('/user/auth/sign-up')
+                        ->withErrors('信箱已存在')
+                        ->withInput();
+        }
+
+        $input['password'] = Hash::make($input['password']);
+
+        $Users = User::create($input);
+
+        /*$mail_binding = ['nickname'=>$input['nickname']];
+        Mail::send('email.signUpEmailNotification', $mail_binding, function($mail) use($input){
+            $mail->to($input['email']);
+            $mail->from('hello080810@gmail.com');
+            $mail->subject('註冊成功-Shop Laravel');
+        });*/
+
+
+        return redirect('/user/auth/sign-in')
+                        ->with(['message'=> ['signUpSuccess'=>'註冊成功',] ,] );
+    }
+
+
+
+   //------------------最高權限增加管理員------------------------------------------
+    public function addadmin(){
+        $god = session()->get('user_id');
+
+        $binding = [
+            'title' => 'God number '. $god
+        ];
+        return view('auth.signUpAdmin',$binding);
+    }
+
+
+    //------------------最高權限增加管理員處理----------------------------------------------
+    public function addadminProcess(){
 
         $input = request()->all();
         //var_dump($input);

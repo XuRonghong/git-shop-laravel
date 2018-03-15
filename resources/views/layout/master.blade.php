@@ -11,6 +11,13 @@
 	<body>
 		<header>		
 			<ul class="nav">
+				<li><a href="{{ url('/merchandise') }}">商品列表&nbsp;&nbsp;</a></li>
+				<li><a href="{{ url('/transaction') }}">交易紀錄&nbsp;&nbsp;</a></li>
+				<li>&nbsp;</li>
+				<li><a href="{{ url('/merchandise/manage') }}">編輯列表&nbsp;&nbsp;</a></li>
+				<li><a href="{{ url('/merchandise/create') }}">新增商品&nbsp;&nbsp;</a></li>
+				<li>&nbsp;</li>
+
 				@if(session()->has('user_id'))
 					<li><a href="{{ url('/user/auth/sign-out') }}">登出</a></li>
 				@else

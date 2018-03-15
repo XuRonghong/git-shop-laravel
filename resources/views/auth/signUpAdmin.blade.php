@@ -13,7 +13,7 @@
 		<!-- 顯示錯誤訊息模板元件 -->
 		@include('components.validationErrorMessage');
 
-		<form action="{{ url('/user/auth/sign-up') }}" method="post">
+		<form action="{{ url('/user/auth/addadmin') }}" method="post">
 			
 			<!-- CSRF 欄位 -->
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -36,6 +36,14 @@
 			<label>
 				確認密碼:
 				<input type="password" name="password_confirmation" placeholder="確認密碼">
+			</label>
+
+			<label>
+				帳號類型:
+				<select name="type">
+					<option value="G">一般會員</option>
+					<option value="A">管理者</option>
+				</select>
 			</label>
 
 			<button type="submit">註冊</button>
