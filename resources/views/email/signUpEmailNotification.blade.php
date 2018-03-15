@@ -1,0 +1,1 @@
+<h1>{{$nickname}} Shop Laravel -註冊完成</h1>
