@@ -19,6 +19,15 @@ class MerchandiseController extends Controller
 
     //----------------------- 商品頁面 --------------------------------------------
     public function merchandiseListPage(){
+        //顯示會員資料
+        $user_nickname=null;
+        if(!is_null(session()->get('user_id')))
+        {
+            $User = User::where('id', session()->get('user_id') )->first();            
+            $user_nickname=$User->nickname;
+        }
+
+
 
         $row_per_page = 2;     //每頁資料量
 
@@ -37,6 +46,7 @@ class MerchandiseController extends Controller
         $binding = [
             'title'=>'商品列表', 
             'MerchandisePaginate'=> $MerchandisePaginate, 
+            'user_nickname'=> $user_nickname ,
         ];
 
 
@@ -119,6 +129,16 @@ class MerchandiseController extends Controller
 
     //----------------------- 商品頁 --------------------------------------------
     public function merchandiseItemPage($merchandise_id){
+        //顯示會員資料
+        $user_nickname=null;
+        if(!is_null(session()->get('user_id')))
+        {
+            $User = User::where('id', session()->get('user_id') )->first();            
+            $user_nickname=$User->nickname;
+        }
+
+
+
 
         $Merchandise = Merchandise::findOrFail($merchandise_id);   //撈取商品資料
 
@@ -126,7 +146,10 @@ class MerchandiseController extends Controller
             $Merchandise->photo = url($Merchandise->photo);       //設定商品照片網址
         }
 
-        $binding=[ 'title' => $Merchandise->name , 'Merchandise' => $Merchandise , ];
+        $binding=[  'title' => $Merchandise->name , 
+                    'Merchandise' => $Merchandise , 
+                    'user_nickname'=> $user_nickname ,
+                ];
 
         return view('merchandise.showMerchandise',$binding);        
     }

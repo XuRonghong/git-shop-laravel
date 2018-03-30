@@ -41,34 +41,52 @@ class UserAuthController extends Controller
 
     	if($validator->fails()){
             //驗證資料錯誤
-    		return redirect('/user/auth/sign-in')
+    		return redirect()->back()//('/user/auth/sign-in')
     					->withErrors($validator)
     					->withInput();
     	}
 
         //從資料庫撈取使用者資料 sql * form users where email= input['email'] limit 1
-    	$User = User::where('email',$input['email'])->firstOrFail();
+    	$User = User::all();
+        foreach ($User as $u ) {
+            # code...
+            if($u['email'] == $input['email']) 
+            {
 
-        //密碼是否一樣
-    	$is_password_correct=Hash::check($input['password'], $User->password);
-    	if(!$is_password_correct){
-            //錯誤訊息陣列
-    		$error_message=['msg'=> ['密碼驗證錯誤',] ,];
-            //滾回去
-    		return redirect('/user/auth/sign-in')
-    					->withErrors($error_message)
-    					->withInput();
-    	}
+                 //密碼是否一樣
+                $is_password_correct=Hash::check($input['password'], $u['password']);
+                if(!$is_password_correct){
+                    //錯誤訊息陣列
+                    $error_message=['msg'=> ['密碼驗證錯誤',] ,];
+                    //滾回去
+                    return redirect('/user/auth/sign-in')
+                                ->withErrors($error_message)
+                                ->withInput();
+                }
 
-    	session()->put('user_id',$User->id);   //驗證成功，紀錄會員編號
-        session()->put('user_type',$User->type);
+                session()->put('user_id',$u['id']);   //驗證成功，紀錄會員編號
+                session()->put('user_type',$u['type']);
 
 
-        if($User->type == "G")return redirect('/merchandise/');
-        if($User->type == "A")return redirect('/merchandise/manage');
-            return redirect()->back();
+                if($u['type'] == "G")return redirect('/merchandise/');
+                if($u['type'] == "A")return redirect('/merchandise/manage');
+
+                    
+                    
+            }
+
+        }
+        //滾回去
+        $error_message=['msg'=> ['此信箱不存在',] ,];
+        return redirect()->back()
+                        ->withErrors($error_message)
+                        ->withInput();
+        //return redirect('/user/auth/sign-in');
         //重新導向到原先造訪頁面，沒有嘗試造訪頁則導向首頁
-    	//return redirect()->intended('/');
+        //return redirect()->intended('/user/auth/sign-in');
+
+
+       
     }
 
 

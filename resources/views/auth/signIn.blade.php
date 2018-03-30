@@ -16,26 +16,39 @@
 		<!-- 使用社群API模板元件 -->
 		@include('components.socialButtons');
 
-		<form action="{{ url('/user/auth/sign-in') }}" method="post">
+		<form action="{{ url('/user/auth/sign-in') }}" method="post" >
 
 			<!-- CSRF 欄位 -->
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-			<label>
-				Email:
-				<input type="text" name="email" placeholder="Email" value="{{ old('email') }}">
-			</label>
+			<div class="form-group">
+				<label for="exampleInputEmail1">Email</label>
+		      	<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" name="email" value="{{ old('email') }}">
+		      	<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+		    </div>
 
-			<label>
-				密碼:
-				<input type="password" name="password" placeholder="密碼" >
-			</label>
+			<div class="form-group">
+			    <label for="exampleInputPassword1">密碼:</label>
+				    <input type="password" id="exampleInputPassword1" class="form-control" aria-describedby="passwordHelpInline" placeholder="Password" name="password">
+				    <small id="passwordHelpInline" class="text-muted">Must be 1-20 characters long.</small>
+				</div>
+			</div>
 
-			<button type="submit">登入</button>
+			<!--<div class="form-check">
+			    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+			    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+			</div>-->
 
-			<label>				
-				<ul>{{ $mes['signUpSuccess'] or ''}}</ul>
-			</label>
+			<div class="form-group row">
+			    <div class="col-sm-10">
+			      <button type="submit" class="btn btn-primary">登入</button>
+			    </div>
+
+			    <label>				
+					<ul>{{ $mes['signUpSuccess'] or ''}}</ul>
+				</label>
+			</div>
+
 		</form>
 	</div>
 @endsection

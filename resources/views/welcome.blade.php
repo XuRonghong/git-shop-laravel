@@ -80,7 +80,11 @@
             @endif
             -->
             <div class="top-right links">
+                @if(is_null( session()->get('user_id') ))
                         <a href="{{ url('/user/auth/sign-in') }}">Login</a>
+                @else
+                        <a href="{{ url('/user/auth/sign-out') }}">Logout</a>
+                @endif
                         <a href="">&nbsp;&nbsp;&nbsp;S</a>
                         <a href="">hop</a>
                         <a href="">&nbsp;-</a>
@@ -90,6 +94,10 @@
 
 
             <div class="content">
+
+                <img src="{{asset('assets/images/index_01.jpg')}}" class="img-fluid" alt="Responsive image">
+
+
                 <div class="title m-b-md">
                     Laravel
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Shop\Entity\Transaction;
+use App\Shop\Entity\User;
 
 
 class TransactionController extends Controller
@@ -12,6 +13,15 @@ class TransactionController extends Controller
 
     //----------------------- 交易紀錄頁面 --------------------------------------------
     public function transactionListPage(){
+        //顯示會員資料
+        $user_nickname=null;
+        if(!is_null(session()->get('user_id')))
+        {
+            $User = User::where('id', session()->get('user_id') )->first();            
+            $user_nickname=$User->nickname;
+        }
+
+
 
     	// 取得登入會員資料
         $user_id = session()->get('user_id');
@@ -33,7 +43,8 @@ class TransactionController extends Controller
 
         $binding = [
             'title'=>'交易紀錄', 
-            'TransactionPaginate'=> $TransactionPaginate, 
+            'TransactionPaginate'=> $TransactionPaginate,             
+            'user_nickname'=> $user_nickname ,
         ];
 
 
