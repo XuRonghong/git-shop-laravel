@@ -42,12 +42,18 @@
 
 			<li>
 				商品介紹:
-				<input type="text" name="introduction" placeholder="商品介紹" value="{{ old('introduction') }}" >
+				<textarea name="introduction"
+						  placeholder="商品介紹"
+						  rows="5"
+						  cols="30" ></textarea>
 			</li>
 
 			<li>
 				商品英文介紹:
-				<input type="text" name="introduction_en" placeholder="商品英文介紹" value="{{ old('introduction_en') }}">
+				<textarea name="introduction_en"
+					   placeholder="商品英文介紹"
+					   rows="5"
+					   cols="30" ></textarea>
 			</li>
 
 			<li>
